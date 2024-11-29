@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CityDetailPage extends StatelessWidget {
-  const CityDetailPage({super.key});
+  const CityDetailPage({super.key, required this.city});
+
+  final String city;
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('市区町村の詳細画面'),
+        title:  Text(city),
       ),
-      body: const Center(
-        child: Text('市区町村の詳細画面です'),
+      body:  Center(
+        child: Text('$cityの詳細画面です'),
       ),
     );
   }
