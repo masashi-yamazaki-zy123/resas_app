@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:myapp/env.dart';
+import 'city.dart';
 import 'city_detail_page.dart';
 import 'package:http/http.dart' as http;
+
 
 class CityListPage extends StatefulWidget {
   const CityListPage({
@@ -35,22 +37,7 @@ class _CityListPageState extends State<CityListPage> {
 
   @override
   Widget build(BuildContext context) {
-    const cities = [
-      '札幌市',
-      '横浜市',
-      '川崎市',
-      '名古屋市',
-      '京都市',
-      '大阪市',
-      '堺市',
-      '神戸市',
-      '岡山市',
-      '広島市',
-      '北九州市',
-      '福岡市',
-      '熊本市',
-      '那覇市',
-    ];
+    // ignore: unused_local_variable
     return Scaffold(
       appBar: AppBar(
         title: const Text('市区町村一覧'),
@@ -65,25 +52,26 @@ class _CityListPageState extends State<CityListPage> {
             }
             final json = jsonDecode(snapshot.data!)['result'] as List;
             final items = json.cast<Map<String, dynamic>>();
-            print(snapshot.data);
-            return ListView(
-              children: [
-                for (final city in items)
-                  ListTile(
-                    title: Text(city['cityName']),
-                    subtitle: const Text('政令指定都市'),
+            final cities = items.map((item) => City.fromJson(item)).toList();
+            return ListView.builder(
+              itemCount: cities.length,
+                itemBuilder: (context, index) {
+                final city = cities[index];
+                return ListTile(
+                    title: Text(city.cityName),
+                    subtitle: Text(city.cityType.label),
                     trailing: const Icon(Icons.navigate_next),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => CityDetailPage(
-                            city: city['cityName'],
+                            city: city,
                           ),
                         ),
                       );
                     },
-                  ),
-              ],
+                  );
+                },
             );
           }),
     );
